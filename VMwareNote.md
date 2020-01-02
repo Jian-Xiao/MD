@@ -25,29 +25,29 @@
 
 <a id="11-选择自定义来创建一个空的系统"></a>
 #### 1.1 选择自定义来创建一个空的系统
-<img src="assets/VMwareIMG/install/step_1.png" width=400>
-<img src="assets/VMwareIMG/install/step_2.png" width=400>
-<img src="assets/VMwareIMG/install/step_3.png" width=400>
-<img src="assets/VMwareIMG/install/step_4.png" width=400>
+<img src="assets/VMwareIMG/Install/step_1.png" width=400>
+<img src="assets/VMwareIMG/Install/step_2.png" width=400>
+<img src="assets/VMwareIMG/Install/step_3.png" width=400>
+<img src="assets/VMwareIMG/Install/step_4.png" width=400>
 
 
 <a id="12-载入镜像文件装系统"></a>
 #### 1.2 载入镜像文件装系统  
 启动虚拟机前，配置好ISO镜像的路径  
 
-<img src="assets/VMwareIMG/install/step_5.png" width=600> 
+<img src="assets/VMwareIMG/Install/step_5.png" width=600> 
 
 启动虚拟机，选择中文语言，并安装Ubuntu，然后一直下一步。输入用户名和密码后进入安装，不要点Skip，一直等到安装完成。
 
-<img src="assets/VMwareIMG/install/step_6.png" width=400>
-<img src="assets/VMwareIMG/install/step_7.png" width=400>
+<img src="assets/VMwareIMG/Install/step_6.png" width=400>
+<img src="assets/VMwareIMG/Install/step_7.png" width=400>
 
 安装完成后重启即可进入操作系统
 
 <a id="13-取消镜像文件依赖"></a>
 ### 1.3 取消镜像文件依赖
 关闭虚拟机，将使用ISO镜像改为使用物理驱动，并取消连接即可  
-  <img src="assets/VMwareIMG/install/step_8.png" width=600>
+  <img src="assets/VMwareIMG/Install/step_8.png" width=600>
 
 <a id="2-安装-vmware-tools"></a>
 ### 2 安装 VMware Tools
