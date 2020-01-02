@@ -1,6 +1,6 @@
 ### 1 Ubuntu 没网
 #### 1.1 打开VMware的服务
-<img src="./UbuntuIMG/InternetIcon/step_1.png" height=400>  
+<img src="assets/UbuntuIMG/InternetIcon/step_1.png" height=400>  
 
 #### 1.2 重置Ubuntu网络状态
 ```
