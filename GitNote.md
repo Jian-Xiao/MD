@@ -47,3 +47,30 @@ git clone https://gitee.com/Jian-Xiao/Segment
 git pull origin master
 
 ```
+
+
+### 2 Git与Gitee同时使用
+因为没有梯子，所以从GitHub上克隆很慢，所以**用Gitee导入了Github的仓库**，在克隆Gitee就很快。
+```
+# 1 克隆Gitee
+git clone https://gitee.com/Jian-Xiao/Segment
+```
+但是很快就来了问题：**该本地仓库对应的是Gitee的远程仓库**。也就是`git push origin master`是传到**Gitee**上，那么有没有办法使得push可以传到GitHub上呢？
+```
+# 2 添加origin2
+git remote add origin2 https://github.com/Jian-Xiao/Segment.git
+
+# 3 同步到Gitee
+git push origin master
+
+# 4 同步到GitHub
+git push origin2 master
+```
+不难发现origin、origin2都只是代表一个仓库地址罢了：
+
+字段|地址
+----|----
+origin  | https://gitee.com/Jian-Xiao/Segment.git
+origin2 | https://github.com/Jian-Xiao/Segment.git
+
+注意，`https://gitee.com/Segment.git`和`https://gitee.com/Segment`没有区别
