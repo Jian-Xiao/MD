@@ -6,7 +6,7 @@
 sudo cat /etc/mysql/debian.cnf 
 mysql -u debian-sys-maint
 # 2 连接到mysql数据库
-mysql> use mysql;
+mysql> use mysql;    
 # 3 修改root用户密码               
 mysql> update mysql.user set authentication_string=password('123456') where user='root' and Host ='localhost';
 # 4 更新    
@@ -15,4 +15,3 @@ mysql> flush privileges;
 # 5 退出
 mysql> quit; 
 ```
-
