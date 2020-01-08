@@ -1,6 +1,36 @@
 # API 文档
+<!-- MarkdownTOC -->
 
-### 注册
+- [1 用户](#1-用户)
+    - [1.1 注册](#11-注册)
+        - [1.1.1 Asch 注册](#111-asch-注册)
+    - [1.2 登录](#12-登录)
+    - [1.3 获取用户信息](#13-获取用户信息)
+    - [1.4 用户浏览记录](#14-用户浏览记录)
+    - [1.5 上传头像](#15-上传头像)
+    - [1.6 用户交易记录](#16-用户交易记录)
+    - [1.7 退出登录](#17-退出登录)
+    - [1.8 修改信息](#18-修改信息)
+    - [1.9 查询余额](#19-查询余额)
+- [2 问题](#2-问题)
+    - [2.1 提交问题](#21-提交问题)
+    - [2.2 问题列表](#22-问题列表)
+    - [2.3 获取问题详情](#23-获取问题详情)
+    - [2.4 回答问题](#24-回答问题)
+    - [2.5 回复列表](#25-回复列表)
+    - [2.6 回复回答](#26-回复回答)
+    - [2.7 问题/答案/回访 投票](#27-问题答案回访-投票)
+- [3 回访](#3-回访)
+    - [3.1 发表回访](#31-发表回访)
+    - [3.2 参加回访](#32-参加回访)
+    - [3.3 取消回访](#33-取消回访)
+
+<!-- /MarkdownTOC -->
+
+<a id="1-用户"></a>
+## 1 用户
+<a id="11-注册"></a>
+### 1.1 注册
 接口地址：/users/register  
 请求方式：POST  
 支持格式：JSON  
@@ -48,9 +78,43 @@ JSON返回示例：
 }
 ```
 
+<a id="111-asch-注册"></a>
+#### 1.1.1 Asch 注册
+接口地址：/api/accounts/new  
+请求方式：GET  
+支持格式：JSON  
+接口备注： 注意端口是Asch的端口4096，不是后台端口3000
+
+返回参数说明：  
+
+名称 | 类型 | 说明
+-----|------|------
+success |bool   | 
+secret  |string| Asch的私钥，对应aschSecret
+publicKey|string| Asch的公钥
+address|string|  Asch的地址，对应aschAddress
+
+请求示例：  
+```
+# 请求行
+localhost:4096/api/accounts/new
+```
+  
+JSON返回示例：
+```
+# 响应体
+{
+    "success": true,
+    "secret": "drop company tired movie runway hammer name stone target knee ribbon left",
+    "publicKey": "b12ef971ac609783b448aeaf4fe8f9e101b86a2c681b95f67517d5881e48471c",
+    "privateKey": "6273f2f105c7f7006f95c0e89c33116be564ae4637bec2352ea065c59abb629fb12ef971ac609783b448aeaf4fe8f9e101b86a2c681b95f67517d5881e48471c",
+    "address": "A6yFrRMfoGqtMU7hMMAT3yRV33mbnynGxV"
+}
+```
 
 
-### 登录
+<a id="12-登录"></a>
+### 1.2 登录
 接口地址：/users/login  
 请求方式：POST  
 支持格式：JSON  
@@ -98,7 +162,8 @@ connect.sid=s%3Asgz-gLJCBMSqtx3rYwIcFAXi6No_gU8e.A6JwN9OfHofg5YgsBPg1v2T2u5Nxm3q
 
 
 
-### 获取用户信息
+<a id="13-获取用户信息"></a>
+### 1.3 获取用户信息
 接口地址：/users/login  
 请求方式：GET  
 支持格式： 
@@ -137,7 +202,8 @@ JSON返回示例：
 ```
 
 
-### 用户浏览记录
+<a id="14-用户浏览记录"></a>
+### 1.4 用户浏览记录
 接口地址：/users/history  
 请求方式：GET  
 支持格式： 
@@ -201,7 +267,8 @@ JSON返回示例：
 
 
 
-### 上传头像
+<a id="15-上传头像"></a>
+### 1.5 上传头像
 接口地址：/users/upload_user_img  
 请求方式：POST  
 支持格式：JSON  
@@ -243,7 +310,8 @@ JSON返回示例：
 ```
 
 
-### 用户交易记录
+<a id="16-用户交易记录"></a>
+### 1.6 用户交易记录
 接口地址：/users/record  
 请求方式：GET  
 支持格式： 
@@ -292,7 +360,8 @@ QUESTION_DELAY_REWARD_0|文章第一轮奖励结算
 ANSWER_DEDLAY_REWARD_1|回答第二轮奖励结算
 QUESTION_DELAY_REWARD_1|文章第二轮奖励结算
 
-### 退出登录
+<a id="17-退出登录"></a>
+### 1.7 退出登录
 接口地址：/users/logout  
 请求方式：GET  
 支持格式：  
@@ -322,48 +391,602 @@ JSON返回示例：
 }
 ```
 
-// 提交提问
-export const SUBMIT_QUESTION = params => { return axios.post(`${base}/question/ask_question`,qs.stringify(params));};
 
-// 问题列表
-export const QUESTION_LIST = params => {return axios.get(`${base}/question/question_list`, {params:params});};
+<a id="18-修改信息"></a>
+### 1.8 修改信息
+接口地址：/users/changeinfo  
+请求方式：POST  
+支持格式：JSON  
+接口备注：通过**cookie**来维持登录  
+请求参数说明：
 
-// 获取问题详情
-export const QUESTION_DETAIL = params => { return axios.get(`${base}/question/question_detail`,{params:params});};
+名称    | 类型 | 必填 | 说明
+--------|------|------|-----
+name    |string| Y | 
+mobile  |string| Y |
+email   |string| Y | 
 
-http://localhost:3000/question/question_detail?q_id=65
+返回参数说明：  
 
-// 回答问题
-export const ANSWER = params => { return axios.post(`${base}/question/answer`,qs.stringify(params));};
+名称 | 类型 | 说明
+-----|------|------
+code |int   | 200为正确，其他为错误
+msg  |string| 返回正确为sucess，否则为错误信息
 
-// 回答问题
-export const REPLY = params => { return axios.post(`${base}/question/reply`,qs.stringify(params));};
+请求示例：  
+```
+# 请求行
+localhost:3000\users\changeinfo
+# 请求头
+connect.sid=s%3Asgz-gLJCBMSqtx3rYwIcFAXi6No_gU8e.A6JwN9OfHofg5YgsBPg1v2T2u5Nxm3qW%2BAW2s2UGxkE
+# 请求体
+{
+    "name":"robert",
+    "email":"123456",
+    "mobile":"123456"
+}
+```
+  
+JSON返回示例：
+```
+# 响应体
+{
+    "code": 200,
+    "msg": "success",
+    "data": ""
+}
+```
 
-// 问题/答案 投票
-export const VOTE = params => { return axios.post(`${base}/question/vote`,qs.stringify(params));};
+<a id="19-查询余额"></a>
+### 1.9 查询余额
+接口地址：/users/getbalance  
+请求方式：GET  
+支持格式： 
+接口备注：通过**cookie**来维持登录  
+
+返回参数说明：  
+
+名称 | 类型 | 说明
+-----|------|------
+code |int   | 200为正确，其他为错误
+msg  |string| 返回正确为sucess，否则为错误信息
+data |string| 余额，货币类型，Asch地址
+
+请求示例：  
+```
+# 请求行
+localhost:3000\users\getbalance
+# 请求头
+connect.sid=s%3Asgz-gLJCBMSqtx3rYwIcFAXi6No_gU8e.A6JwN9OfHofg5YgsBPg1v2T2u5Nxm3qW%2BAW2s2UGxkE
+```
+  
+JSON返回示例：
+```
+# 响应体
+{
+    "code": 200,
+    "msg": "success",
+    "data": {
+        "address": "ABuH9VHV3cFi9UKzcHXGMPGnSC4QqT2cZ5",
+        "balance": "999999999910000000",
+        "currency": "TTT"
+    }
+}
+```
+
+<a id="2-问题"></a>
+## 2 问题
+<a id="21-提交问题"></a>
+### 2.1 提交问题
+接口地址：/question/ask_question  
+请求方式：POST  
+支持格式：JSON 
+接口备注：通过**cookie**来维持登录  
+
+请求参数说明：
+
+名称    | 类型 | 必填 | 说明
+--------|------|------|-----
+title   |string| Y | 
+tag     |string| Y | 多个标签用逗号隔开
+content |string| Y | 
+least_rv_time| int | Y | 最短回访间隔 
+
+返回参数说明：  
+
+名称 | 类型 | 说明
+-----|------|------
+code |int   | 200为正确，其他为错误
+msg  |string| 返回正确为sucess，否则为错误信息
+data |string| 余额，货币类型，Asch地址
+
+请求示例：  
+```
+# 请求行
+localhost:3000\question\ask_question
+# 请求头
+connect.sid=s%3Asgz-gLJCBMSqtx3rYwIcFAXi6No_gU8e.A6JwN9OfHofg5YgsBPg1v2T2u5Nxm3qW%2BAW2s2UGxkE
+# 请求体
+{
+    "title":"robert",
+    "content":"123456",
+    "tag":"tag1,tag2,tag3",
+    "least_rv_time":3
+}
+```
+  
+JSON返回示例：
+```
+# 响应体
+{
+    "code": 200,
+    "msg": "success",
+}
+```
+
+<a id="22-问题列表"></a>
+### 2.2 问题列表
+接口地址：/question/question_list  
+请求方式：GET  
+支持格式：url参数 
+接口备注：  
+
+请求参数说明：
+
+名称    | 类型 | 必填 | 说明
+--------|------|------|-----
+page    | int  | Y |  第一个问题的位置
+pageSize| int  | Y |  问题数量。page=2&pageSize=10，表示获取id为11-20的问题 
+tags    |string| N | 筛选条件。问题的标签需要包含其中之一
+s_content|string| N | 筛选条件。问题需要包含的内容
+order_type| int | Y | 问题排序方式：1 发帖时间 2 浏览量 3 无回答 4 回复时间
+
+返回参数说明：  
+
+名称 | 类型 | 说明
+-----|------|------
+code |int   | 200为正确，其他为错误
+msg  |string| 返回正确为sucess，否则为错误信息
+data |string| 问题列表
+total|int   | 问题总数
+
+请求示例：  
+```
+# 请求行
+localhost:3000\question\question_list?page=1&pageSize=10&tags&s_content&order_type=1
+```
+  
+JSON返回示例：
+```
+# 响应体
+{
+    "code": 200,
+    "msg": "success",
+    "data": [
+        {
+            "q_id": 67,
+            "questionTitle": "robert",
+            "tagName": [
+                "tag1",
+                "tag2",
+                "tag3"
+            ],
+            "up_votes": 0,  //点赞数
+            "answer": 0,    //回答数
+            "views": 0,     //浏览量
+            "lastRespondent": "robert"
+        },
+        {
+            "q_id": 66,
+            "questionTitle": "sas",
+            "tagName": [
+                "茶叶"
+            ],
+            "up_votes": 0,
+            "answer": 0,
+            "views": 2,
+            "lastRespondent": "robert"
+        }
+    ],
+    "total": 20
+}
+```
+
+<a id="23-获取问题详情"></a>
+### 2.3 获取问题详情
+接口地址：/question/question_detail  
+请求方式：GET  
+支持格式：url参数 
+接口备注：  
+
+请求参数说明：
+
+名称    | 类型 |必填| 说明
+--------|------|----|-----
+q_id    | int  | Y  |  
+
+返回参数说明：  
+
+名称 | 类型 | 说明
+-----|------|------
+code |int   | 200为正确，其他为错误
+msg  |string| 返回正确为sucess，否则为错误信息
+data |string| 问题详情，回答列表，回访列表
+join_time|string| null为未参加该问题的回访，否则为参加时间
+
+请求示例：  
+```
+# 请求行
+localhost:3000\question\question_detail?q_id=2
+```
+  
+JSON返回示例：
+```
+# 响应体
+{
+    "code": 200,
+    "message": "sucess",
+    "data": {
+        "questionDetail": {
+            "title": "Question1",
+            "content": "this is question one",
+            "img_url": "http://localhost:9000/static/user/2020-01-07/20-59-14-276.jpg", //用户头像地址
+            "username": "robert",
+            "least_rv_time": 0,
+            "tags": "what is it",
+            "up_votes": 0,
+            "down_votes": 0,
+            "create_time": "1999-01-01T16:00:00.000Z",
+            "last_res_time": "2000-08-07T16:00:00.000Z", //最后回复时间
+            "last_res_id": 1
+        },
+        "answerList": [
+            {
+                "answerId": 1,
+                "username": "robert",
+                "img_url": "http://localhost:9000/static/user/2020-01-07/20-59-14-276.jpg",
+                "answer": "errwerw", //回答内容
+                "createTime": "2019-11-21T09:01:01.000Z",
+                "up_votes": 100,
+                "down_votes": 0  //点踩
+            },
+            {
+                "answerId": 3,
+                "username": "robert",
+                "img_url": "http://localhost:9000/static/user/2020-01-07/20-59-14-276.jpg",
+                "answer": "<p>12311456</p>",
+                "createTime": "2019-10-11T07:05:32.000Z",
+                "up_votes": 0,
+                "down_votes": 0
+            }
+        ],
+        "returnvisitList": [
+            {
+                "returnvisitId": 1,
+                "username": "robert",
+                "img_url": "http://localhost:9000/static/user/2020-01-07/20-59-14-276.jpg",
+                "returnvisit": "123456",
+                "createTime": "2018-01-09T08:00:00.000Z",
+                "up_votes": 0,
+                "down_votes": 0
+            },
+            {
+                "returnvisitId": 5,
+                "username": "robert",
+                "img_url": "http://localhost:9000/static/user/2020-01-07/20-59-14-276.jpg",
+                "returnvisit": "",
+                "createTime": "2019-11-01T08:55:09.000Z",
+                "up_votes": 0,
+                "down_votes": 0
+            }
+        ],
+        "join_time": "2019-11-03T02:09:11.000Z" 
+    }
+}
+```
 
 
-//修改信息
-export const CHANGE_INFO = params =>{ return axios.post(`${base}/users/changeinfo`,qs.stringify(params));};
+<a id="24-回答问题"></a>
+### 2.4 回答问题
+接口地址：/question/answer  
+请求方式：POST  
+支持格式：JSON 
+接口备注：  **cookie**
 
-//查询余额
-export const GET_BALANCE = params =>{ return axios.get(`${base}/users/getbalance`,{params:params});};
+请求参数说明：
 
-//发表回访 
-export const RETURNVISIT = params =>{ return axios.post(`${base}/returnvisit/returnvisit`,qs.stringify(params));};
+名称    | 类型 |必填| 说明
+--------|------|----|-----
+q_id    | int  | Y  |  
+content |string| Y  |
 
-//参加回访
-export const JOIN_RETURNVISIT = params =>{ return axios.post(`${base}/returnvisit/join_returnvisit`,qs.stringify(params));};
+返回参数说明：  
 
-//取消回访
-export const CANCLE_RETURNVISIT = params =>{ return axios.post(`${base}/returnvisit/cancel_returnvisit`,qs.stringify(params));};
+名称 | 类型 | 说明
+-----|------|------
+code |int   | 200为正确，其他为错误
+msg  |string| 返回正确为sucess，否则为错误信息
 
-//回复列表
-export const REPLY_LIST = params =>{ return axios.get(`${base}/question/reply_list`,{params:params});};
+请求示例：  
+```
+# 请求行
+localhost:3000\question\answer
+# 请求头
+connect.sid=s%3Asgz-gLJCBMSqtx3rYwIcFAXi6No_gU8e.A6JwN9OfHofg5YgsBPg1v2T2u5Nxm3qW%2BAW2s2UGxkE
+# 请求体
+{
+    "content":"11111",
+    "q_id":1
+}
+```
+  
+JSON返回示例：
+```
+# 响应体
+{
+    "code": 200,
+    "message": "sucess"
+}
+```
+
+<a id="25-回复列表"></a>
+### 2.5 回复列表
+接口地址：/question/reply_list  
+请求方式：GET  
+支持格式：url参数 
+接口备注：  
+
+请求参数说明：
+
+名称    | 类型 |必填| 说明
+--------|------|----|-----
+a_id    | int  | Y  |  
+
+返回参数说明：  
+
+名称 | 类型 | 说明
+-----|------|------
+code |int   | 200为正确，其他为错误
+msg  |string| 返回正确为sucess，否则为错误信息
+data |string| 回复列表
+
+请求示例：  
+```
+# 请求行
+localhost:3000\question\reply_list?a_id=37
+```
+  
+JSON返回示例：
+```
+# 响应体
+{
+    "code": 200,
+    "msg": "success",
+    "data": [
+        {
+            "username": "robert",
+            "content": "11111",
+            "createTime": "2020-01-08T04:36:21.000Z"
+        }
+    ],
+    "total": 1
+}  
+```
+
+<a id="26-回复回答"></a>
+### 2.6 回复回答
+接口地址：/question/reply  
+请求方式：POST  
+支持格式：JSON 
+接口备注：   **cookie**
+
+请求参数说明：
+
+名称    | 类型 |必填| 说明
+--------|------|----|-----
+a_id    | int  | Y  |  
+content |string| Y  |
+
+返回参数说明：  
+
+名称 | 类型 | 说明
+-----|------|------
+code |int   | 200为正确，其他为错误
+msg  |string| 返回正确为sucess，否则为错误信息
+
+请求示例：  
+```
+# 请求行
+localhost:3000\question\reply
+# 请求头
+connect.sid=s%3Asgz-gLJCBMSqtx3rYwIcFAXi6No_gU8e.A6JwN9OfHofg5YgsBPg1v2T2u5Nxm3qW%2BAW2s2UGxkE
+# 请求体
+{
+    "content":"11111",
+    "a_id":1
+}
+```
+  
+JSON返回示例：
+```
+# 响应体
+{
+    "code": 200,
+    "message": "sucess"
+}
+```
+
+<a id="27-问题答案回访-投票"></a>
+### 2.7 问题/答案/回访 投票
+接口地址：/question/vote  
+请求方式：POST  
+支持格式：JSON 
+接口备注：   **cookie**
+
+请求参数说明：
+
+名称    | 类型 |必填| 说明
+--------|------|----|-----
+q_id    | int  | \  | 
+a_id    | int  | \  | 二选一，对应type
+vote    | int | Y  | 1 为点赞，-1 为点踩
+type | int | Y  | 1 为问题，2 为回答，3 为回访
+
+返回参数说明：  
+
+名称 | 类型 | 说明
+-----|------|------
+code |int   | 200为正确，其他为错误
+msg  |string| 返回正确为sucess，否则为错误信息
+
+请求示例：  
+```
+# 请求行
+localhost:3000\question\vote
+# 请求头
+connect.sid=s%3Asgz-gLJCBMSqtx3rYwIcFAXi6No_gU8e.A6JwN9OfHofg5YgsBPg1v2T2u5Nxm3qW%2BAW2s2UGxkE
+# 请求体
+{
+    "vote":1,
+    "type":1,
+    "q_id":1
+}
+```
+  
+JSON返回示例：
+```
+# 响应体
+{
+    "code": 200,
+    "message": "sucess"
+}
+```
+
+<a id="3-回访"></a>
+## 3 回访
+<a id="31-发表回访"></a>
+### 3.1 发表回访 
+接口地址：/returnvisit/returnvisit  
+请求方式：POST  
+支持格式：JSON 
+接口备注：  **cookie**
+
+请求参数说明：
+
+名称    | 类型 |必填| 说明
+--------|------|----|-----
+q_id    | int  | Y  |  
+content |string| Y  |
+
+返回参数说明：  
+
+名称 | 类型 | 说明
+-----|------|------
+code |int   | 200为正确，其他为错误
+msg  |string| 返回正确为sucess，否则为错误信息
+
+请求示例：  
+```
+# 请求行
+localhost:3000\returnvisit\returnvisit
+# 请求头
+connect.sid=s%3Asgz-gLJCBMSqtx3rYwIcFAXi6No_gU8e.A6JwN9OfHofg5YgsBPg1v2T2u5Nxm3qW%2BAW2s2UGxkE
+# 请求体
+{
+    "content":"11111",
+    "q_id":1
+}
+```
+  
+JSON返回示例：
+```
+# 响应体
+{
+    "code": 200,
+    "message": "sucess"
+}
+```
+
+<a id="32-参加回访"></a>
+### 3.2 参加回访
+接口地址：/returnvisit/join_returnvisit  
+请求方式：POST  
+支持格式：JSON 
+接口备注：  **cookie**
+
+请求参数说明：
+
+名称    | 类型 |必填| 说明
+--------|------|----|-----
+q_id    | int  | Y  |  
+
+返回参数说明：  
+
+名称 | 类型 | 说明
+-----|------|------
+code |int   | 200为正确，其他为错误
+msg  |string| 返回正确为sucess，否则为错误信息
+
+请求示例：  
+```
+# 请求行
+localhost:3000\returnvisit\join_returnvisit
+# 请求头
+connect.sid=s%3Asgz-gLJCBMSqtx3rYwIcFAXi6No_gU8e.A6JwN9OfHofg5YgsBPg1v2T2u5Nxm3qW%2BAW2s2UGxkE
+# 请求体
+{
+    "q_id":1
+}
+```
+  
+JSON返回示例：
+```
+# 响应体
+{
+    "code": 200,
+    "message": "sucess"
+}
+```
+
+<a id="33-取消回访"></a>
+### 3.3 取消回访
+接口地址：/returnvisit/cancel_returnvisit  
+请求方式：POST  
+支持格式：JSON 
+接口备注：  **cookie**
+
+请求参数说明：
+
+名称    | 类型 |必填| 说明
+--------|------|----|-----
+q_id    | int  | Y  |  
+
+返回参数说明：  
+
+名称 | 类型 | 说明
+-----|------|------
+code |int   | 200为正确，其他为错误
+msg  |string| 返回正确为sucess，否则为错误信息
+
+请求示例：  
+```
+# 请求行
+localhost:3000\returnvisit\cancel_returnvisit
+# 请求头
+connect.sid=s%3Asgz-gLJCBMSqtx3rYwIcFAXi6No_gU8e.A6JwN9OfHofg5YgsBPg1v2T2u5Nxm3qW%2BAW2s2UGxkE
+# 请求体
+{
+    "q_id":1
+}
+```
+  
+JSON返回示例：
+```
+# 响应体
+{
+    "code": 200,
+    "message": "sucess"
+}
+```
 
 
-// 获取用户列表
-export const GET_USER_LIST = params=>{ return axios.get(`${base}/users/getlist`,{params:params});};
-
-// 提交文件
-export const UPLOAD = params=> { return axios.post(`${base}/question/upload`),qs.stringify(params)};
